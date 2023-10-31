@@ -1,0 +1,5 @@
+account:
+  login:
+    autologinpage: false
+    location:
+      url: http://www.baidu.com

@@ -26,7 +26,7 @@ public class InterceptedClassImpl implements InterceptedClass {
     @Override
     public List<Class> interceptedClass() {
         List<Class> classList = new ArrayList<>();
-        classList.add(UserController.class);
+//        classList.add(UserController.class);
         return classList;
     }
 }

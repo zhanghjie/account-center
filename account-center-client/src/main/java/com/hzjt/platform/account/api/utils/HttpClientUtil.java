@@ -174,7 +174,6 @@ public class HttpClientUtil {
      * @param headers 请求头 header key-value
      * @return
      */
-
     public static String doGet(String url, Map params, Map headers) {
         CloseableHttpResponse response = null;
         try {
@@ -332,13 +331,11 @@ public class HttpClientUtil {
     }
 
     public static <T> T conversion(String result, Class<T> responseType) {
-        ObjectMapper objectMapper = new ObjectMapper();
         try {
-            // 将对象转换为JSON字符串
-            String json = objectMapper.writeValueAsString(result);
-
+            // 创建ObjectMapper对象
+            ObjectMapper objectMapper = new ObjectMapper();
             // 将JSON字符串转换为对象
-            return objectMapper.readValue(json, responseType);
+            return objectMapper.readValue(result, responseType);
         } catch (Exception e) {
             log.error("HttpClientUtil conversion exception result:{}", e.getMessage());
         }

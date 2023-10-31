@@ -1,18 +1,13 @@
 package com.hzjt.platform.account.user.interfaces;
 
-import com.hzjt.platform.account.api.AccountAuthorization;
-import com.hzjt.platform.account.api.IgnoreAuthorization;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
-import jdk.nashorn.internal.ir.annotations.Ignore;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
-import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletResponse;
-import java.io.IOException;
 
 /**
  * UserController

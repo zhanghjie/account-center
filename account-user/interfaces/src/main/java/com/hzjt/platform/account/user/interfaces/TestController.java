@@ -1,7 +1,9 @@
 package com.hzjt.platform.account.user.interfaces;
 
+import com.alibaba.fastjson.JSON;
 import com.hzjt.platform.account.api.AccountAuthorization;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
+import com.hzjt.platform.account.api.utils.AccountUserInfoUtil;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.RequestMapping;
@@ -21,11 +23,7 @@ import org.springframework.web.bind.annotation.RestController;
 public class TestController {
 
     @GetMapping("/info/business")
-    public AccountUserInfo getUerInfoByUserId(Long userId) {
-        log.info("TestController-getUserInfoByToken");
-        AccountUserInfo accountUserInfo = new AccountUserInfo();
-        accountUserInfo.setUserId(userId);
-        accountUserInfo.setUsername("李四");
-        return accountUserInfo;
+    public String getUerInfoByUserId(Long userId) {
+        return JSON.toJSONString(AccountUserInfoUtil.getUserInfo());
     }
 }

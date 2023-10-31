@@ -3,6 +3,7 @@ package com.hzjt.platform.account.api.security;
 import com.hzjt.platform.account.api.AccountCenterUserService;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
 import com.hzjt.platform.account.api.service.RegistryInterceptedClassMethod;
+import com.hzjt.platform.account.api.utils.AccountUserInfoUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.stereotype.Component;
@@ -79,7 +80,7 @@ public class CustomInterceptor implements HandlerInterceptor {
             AccountUserInfo userInfo = getUserInfo(accountToken, request);
             if (Objects.isNull(userInfo) && accountLoginAutoLoginPage) {
                 return requestNoLogin(request, response);
-            } else if (Objects.isNull(userInfo)) {
+            } else if (Objects.isNull(userInfo) && !ignoreUrl) {
                 return request302(request, response);
             }
             return true;
@@ -124,10 +125,7 @@ public class CustomInterceptor implements HandlerInterceptor {
         if (Objects.isNull(userInfo)) {
             return null;
         }
-        //设置上下文
-        HttpSession session = request.getSession();
-        // 在Session中设置变量
-        session.setAttribute("username", userInfo);
+        AccountUserInfoUtil.setUserInfo(userInfo);
         return userInfo;
     }
 

@@ -69,7 +69,6 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
         Map<String, Object> params = new HashMap<>();
         params.put("accountToken", token);
         String remoteServiceUrl = "/user/login/getUserInfoByToken"; // 远程服务的URL
-        AccountUserInfo accountUserInfo = HttpClientUtil.doGet("http://localhost:8080/user/login", params, AccountUserInfo.class);
         return HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params, AccountUserInfo.class);
     }
 

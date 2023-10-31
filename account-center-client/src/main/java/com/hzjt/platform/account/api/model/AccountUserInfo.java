@@ -84,6 +84,11 @@ public class AccountUserInfo implements Serializable {
     private String idCardName;
 
     /**
+     * 用户身份证号
+     */
+    private String idCardNo;
+
+    /**
      * 用户注册时间
      */
     private String createTime;
@@ -210,6 +215,7 @@ public class AccountUserInfo implements Serializable {
     public void setIdCardName(String idCardName) {
         this.idCardName = idCardName;
     }
+
 
     public String getCreateTime() {
         return createTime;

@@ -1,5 +1,6 @@
 package com.hzjt.platform.account.api;
 
+import com.hzjt.platform.account.api.exception.AccountCenterException;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
 
 /**
@@ -14,6 +15,6 @@ public interface AccountUserPermission {
     /**
      * 检验用户是否有权限
      */
-    Boolean verifyThatTheUserHasPermissions(AccountUserInfo accountUserInfo) throws Exception;
+    Boolean verifyThatTheUserHasPermissions(AccountUserInfo accountUserInfo) throws AccountCenterException;
 
 }

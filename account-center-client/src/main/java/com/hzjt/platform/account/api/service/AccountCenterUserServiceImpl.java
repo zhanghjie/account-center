@@ -24,7 +24,7 @@ import java.util.Map;
 @Order(1)
 public class AccountCenterUserServiceImpl implements AccountCenterUserService {
 
-    @Value("${account-center.url}")
+    @Value("${account.center.url}")
     private String accountCenterUrl;
 
     @Autowired

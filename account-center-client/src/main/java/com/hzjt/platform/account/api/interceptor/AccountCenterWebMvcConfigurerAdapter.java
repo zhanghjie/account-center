@@ -1,12 +1,9 @@
-package com.hzjt.platform.account.api.security;
+package com.hzjt.platform.account.api.interceptor;
 
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.context.annotation.Configuration;
-import org.springframework.context.annotation.Lazy;
-import org.springframework.stereotype.Component;
 import org.springframework.web.servlet.config.annotation.InterceptorRegistry;
 import org.springframework.web.servlet.config.annotation.WebMvcConfigurerAdapter;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 /**
  * WebMvcConfigurerAdapter
@@ -19,11 +16,16 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 public class AccountCenterWebMvcConfigurerAdapter extends WebMvcConfigurerAdapter {
 
     @Autowired
-    private CustomInterceptor customInterceptor;
+    private LoginCheckInterceptor loginCheckInterceptor;
+
+    @Autowired
+    private PermissionsInterceptor permissionsInterceptor;
 
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
-        registry.addInterceptor(customInterceptor)
+        registry.addInterceptor(loginCheckInterceptor)
+                .addPathPatterns("/**");  // 拦截所有的请求
+        registry.addInterceptor(permissionsInterceptor)
                 .addPathPatterns("/**");  // 拦截所有的请求
     }
 }

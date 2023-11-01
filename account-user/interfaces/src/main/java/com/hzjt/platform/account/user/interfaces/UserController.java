@@ -1,9 +1,16 @@
 package com.hzjt.platform.account.user.interfaces;
 
+import com.hzjt.platform.account.api.AccountCenterUserService;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
+import com.hzjt.platform.account.api.model.NewAccountUserInfo;
+import com.hzjt.platform.account.user.domain.AccountUserInfoService;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.beans.factory.annotation.Autowire;
+import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.bind.annotation.PathVariable;
+import org.springframework.web.bind.annotation.PostMapping;
+import org.springframework.web.bind.annotation.RequestBody;
 import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
@@ -21,9 +28,13 @@ import javax.servlet.http.HttpServletResponse;
 @Slf4j
 public class UserController {
 
+    @Autowired
+    private AccountUserInfoService accountUserInfoService;
+
     @GetMapping("login/phone")
     public void loginByPhone(HttpServletResponse response) {
         // 根据手机号查询用户信息
+
         // 校验验证码
         // 生成token
         // 将token存入redis
@@ -33,22 +44,28 @@ public class UserController {
     }
 
     @GetMapping("login")
-    public void login(HttpServletResponse response) {
-        log.info("UserController-login");
+    public String login(String userName, String password, String applicationId) {
+        log.info("UserController-login, {}, {}, {}", userName, password, applicationId);
+        return accountUserInfoService.checkLoginOAuth2(userName, password, applicationId);
     }
 
-    @GetMapping("/login/{name}")
-    public void login12(HttpServletResponse response, @PathVariable String name) {
-        log.info("UserController-login2");
+    @GetMapping("login")
+    public AccountUserInfo directLogin(String userName, String password, String applicationId) {
+        log.info("UserController-directLogin, {}, {}, {}", userName, password, applicationId);
+        return accountUserInfoService.checkLogin(userName, password, applicationId);
+    }
+
+    @PostMapping("/registry/newUser")
+    public Boolean registryNewUser(@RequestBody NewAccountUserInfo newAccountUserInfo) {
+        return accountUserInfoService.registerNewUser(newAccountUserInfo);
     }
 
     @GetMapping("/login/getUserInfoByToken")
     public AccountUserInfo login12(String accountToken) {
         log.info("UserController-getUserInfoByToken");
         AccountUserInfo accountUserInfo = new AccountUserInfo();
-        accountUserInfo.setToken(accountToken);
         accountUserInfo.setUserId(123L);
-        accountUserInfo.setUsername("张三");
+        accountUserInfo.setUserName("张三");
         return accountUserInfo;
     }
 
@@ -57,7 +74,7 @@ public class UserController {
         log.info("UserController-getUserInfoByToken");
         AccountUserInfo accountUserInfo = new AccountUserInfo();
         accountUserInfo.setUserId(userId);
-        accountUserInfo.setUsername("李四");
+        accountUserInfo.setUserName("李四");
         return accountUserInfo;
     }
 }

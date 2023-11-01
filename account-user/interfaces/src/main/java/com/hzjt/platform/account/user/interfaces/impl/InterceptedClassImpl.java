@@ -1,7 +1,6 @@
-package com.hzjt.platform.account.user.config;
+package com.hzjt.platform.account.user.interfaces.impl;
 
 import com.hzjt.platform.account.api.InterceptedClass;
-import com.hzjt.platform.account.user.interfaces.UserController;
 import org.springframework.stereotype.Service;
 
 import java.util.ArrayList;

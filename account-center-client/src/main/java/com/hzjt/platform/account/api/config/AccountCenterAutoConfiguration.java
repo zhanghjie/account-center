@@ -1,9 +1,12 @@
-package com.hzjt.platform.account.api.service;
+package com.hzjt.platform.account.api.config;
 
 import com.hzjt.platform.account.api.AccountCenterUserService;
-import com.hzjt.platform.account.api.security.AccountCenterWebMvcConfigurerAdapter;
-import com.hzjt.platform.account.api.security.CustomInterceptor;
-import com.hzjt.platform.account.api.security.SpringContextUtil;
+import com.hzjt.platform.account.api.interceptor.AccountCenterWebMvcConfigurerAdapter;
+import com.hzjt.platform.account.api.interceptor.LoginCheckInterceptor;
+import com.hzjt.platform.account.api.interceptor.PermissionsInterceptor;
+import com.hzjt.platform.account.api.service.AccountCenterUserServiceImpl;
+import com.hzjt.platform.account.api.service.RegistryInterceptedClassMethod;
+import com.hzjt.platform.account.api.utils.SpringContextUtil;
 import org.springframework.boot.autoconfigure.AutoConfiguration;
 import org.springframework.boot.context.properties.EnableConfigurationProperties;
 import org.springframework.context.annotation.Bean;
@@ -30,8 +33,13 @@ public class AccountCenterAutoConfiguration {
     }
 
     @Bean
-    public CustomInterceptor registryCustomInterceptor() {
-        return new CustomInterceptor();
+    public LoginCheckInterceptor registryCustomInterceptor() {
+        return new LoginCheckInterceptor();
+    }
+
+    @Bean
+    public PermissionsInterceptor registryPermissionsInterceptor() {
+        return new PermissionsInterceptor();
     }
 
     @Bean

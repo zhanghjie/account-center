@@ -1,11 +1,14 @@
-package com.hzjt.platform.account.api.security;
+package com.hzjt.platform.account.api.interceptor;
 
 import com.hzjt.platform.account.api.AccountCenterUserService;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
 import com.hzjt.platform.account.api.service.RegistryInterceptedClassMethod;
 import com.hzjt.platform.account.api.utils.AccountUserInfoUtil;
+import com.hzjt.platform.account.api.utils.SpringContextUtil;
+import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
+import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
@@ -15,7 +18,6 @@ import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandl
 
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
-import javax.servlet.http.HttpSession;
 import java.io.IOException;
 import java.io.PrintWriter;
 import java.lang.reflect.Method;
@@ -29,14 +31,14 @@ import java.util.Objects;
  * @date 2023/10/27 15:40
  */
 @Component
-public class CustomInterceptor implements HandlerInterceptor {
+@Slf4j
+public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
 
 
     // 自定义跳转页面
     @Value("${account.login.location.url:#{\"https://www.example.com/new-location\"}}")
     private String locationUrl;
-    @Value("${account-center.url}")
-    private String accountCenterUrl;
+
     // 自定义跳转页面
     @Value("${account.login.autologinpage:#{false}}")
     private Boolean accountLoginAutoLoginPage;
@@ -47,8 +49,8 @@ public class CustomInterceptor implements HandlerInterceptor {
     private RequestMappingHandlerMapping requestMappingHandlerMapping;
 
 
-    public CustomInterceptor() {
-        System.out.println("Interceptor: CustomInterceptor constructor is called");
+    public LoginCheckInterceptor() {
+        log.info("Interceptor: CustomInterceptor constructor is called");
     }
 
     private void initRequestMappingHandlerMapping() {
@@ -146,13 +148,13 @@ public class CustomInterceptor implements HandlerInterceptor {
     @Override
     public void postHandle(HttpServletRequest request, HttpServletResponse response, Object handler, ModelAndView modelAndView) throws Exception {
         // 在请求处理之后，视图渲染之前执行，可以修改ModelAndView中的数据
-        System.out.println("Interceptor: postHandle method is called");
+        log.info("Interceptor: postHandle method is called");
     }
 
     @Override
     public void afterCompletion(HttpServletRequest request, HttpServletResponse response, Object handler, Exception ex) throws Exception {
         // 在整个请求处理完成之后执行，可以用来做一些资源清理操作
-        System.out.println("Interceptor: afterCompletion method is called");
+        log.info("Interceptor: afterCompletion method is called");
     }
 
     /**
@@ -172,4 +174,8 @@ public class CustomInterceptor implements HandlerInterceptor {
     }
 
 
+    @Override
+    public int getOrder() {
+        return 0;
+    }
 }

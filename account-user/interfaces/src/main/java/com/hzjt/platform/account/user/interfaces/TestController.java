@@ -26,4 +26,5 @@ public class TestController {
     public String getUerInfoByUserId(Long userId) {
         return JSON.toJSONString(AccountUserInfoUtil.getUserInfo());
     }
+
 }

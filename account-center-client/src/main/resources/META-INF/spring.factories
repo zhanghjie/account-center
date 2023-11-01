@@ -1,3 +1,3 @@
 org.springframework.boot.autoconfigure.EnableAutoConfiguration=\
-  com.hzjt.platform.account.api.service.AccountCenterAutoConfiguration
+  com.hzjt.platform.account.api.config.AccountCenterAutoConfiguration
 

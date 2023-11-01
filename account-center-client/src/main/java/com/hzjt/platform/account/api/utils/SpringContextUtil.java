@@ -1,10 +1,12 @@
-package com.hzjt.platform.account.api.security;
+package com.hzjt.platform.account.api.utils;
 
 import org.springframework.beans.BeansException;
 import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
-import org.springframework.context.annotation.Configuration;
-import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
+
+import java.util.ArrayList;
+import java.util.List;
+import java.util.Map;
 
 /**
  * SpringContextUtil
@@ -20,6 +22,15 @@ public class SpringContextUtil implements ApplicationContextAware {
 
     public static Object getBean(Class classType) {
         return applicationContext.getBean(classType);
+    }
+
+    public static <T> List<T> getListBean(Class<T> type) {
+        Map<String, T> beansOfType = applicationContext.getBeansOfType(type);
+        if (beansOfType.size() > 0) {
+            return (List<T>) beansOfType.values();
+        } else {
+            return new ArrayList<>();
+        }
     }
 
     @Override

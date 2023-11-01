@@ -4,13 +4,18 @@ import java.io.Serializable;
 import java.util.Date;
 
 /**
- * AccountUserInfo
- * 功能描述：账户中心用户信息
+ * NewAccountUserInfo
+ * 功能描述：新用户注册信息
  *
  * @author zhanghaojie
- * @date 2023/10/26 10:27
+ * @date 2023/11/1 10:47
  */
-public class AccountUserInfo implements Serializable {
+public class NewAccountUserInfo implements Serializable {
+    /**
+     * 短信验证码
+     */
+    private String smsVerificationCode;
+
     /**
      * 用户地址
      */
@@ -22,19 +27,9 @@ public class AccountUserInfo implements Serializable {
     private String birthday;
 
     /**
-     * 用户注册时间
-     */
-    private Date createTime;
-
-    /**
      * 用户邮箱
      */
     private String email;
-
-    /**
-     * 用户id
-     */
-    private Long userId;
 
     /**
      * 用户身份证姓名
@@ -56,9 +51,8 @@ public class AccountUserInfo implements Serializable {
      */
     private String nickName;
 
-
     /**
-     * 手机号(加密后)
+     * 手机号
      */
     private String phone;
 
@@ -78,14 +72,22 @@ public class AccountUserInfo implements Serializable {
     private Integer type;
 
     /**
-     * 用户更新时间
-     */
-    private Date updateTime;
-
-    /**
      * 用户名
      */
     private String userName;
+
+    /**
+     * 用户密码
+     */
+    private String passWord;
+
+    public String getSmsVerificationCode() {
+        return smsVerificationCode;
+    }
+
+    public void setSmsVerificationCode(String smsVerificationCode) {
+        this.smsVerificationCode = smsVerificationCode;
+    }
 
     public String getAddress() {
         return address;
@@ -103,28 +105,12 @@ public class AccountUserInfo implements Serializable {
         this.birthday = birthday;
     }
 
-    public Date getCreateTime() {
-        return createTime;
-    }
-
-    public void setCreateTime(Date createTime) {
-        this.createTime = createTime;
-    }
-
     public String getEmail() {
         return email;
     }
 
     public void setEmail(String email) {
         this.email = email;
-    }
-
-    public Long getUserId() {
-        return userId;
-    }
-
-    public void setUserId(Long userId) {
-        this.userId = userId;
     }
 
     public String getIdCardName() {
@@ -191,19 +177,19 @@ public class AccountUserInfo implements Serializable {
         this.type = type;
     }
 
-    public Date getUpdateTime() {
-        return updateTime;
-    }
-
-    public void setUpdateTime(Date updateTime) {
-        this.updateTime = updateTime;
-    }
-
     public String getUserName() {
         return userName;
     }
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getPassWord() {
+        return passWord;
+    }
+
+    public void setPassWord(String passWord) {
+        this.passWord = passWord;
     }
 }

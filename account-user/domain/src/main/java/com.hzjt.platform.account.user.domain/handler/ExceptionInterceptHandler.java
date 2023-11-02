@@ -31,7 +31,7 @@ public class ExceptionInterceptHandler {
 //        operationLogAspect.doLog(JSON.toJSONString(e.getMessage()));
         if (e instanceof NullPointerException) {
             return AccountResponse.returnFail(SYSTEM_ERROR, "系统异常");
-        } else if (e instanceof AccountException) {
+        } else if (e instanceof AccountCenterException) {
             return AccountResponse.returnFail(((AccountCenterException) e).getErrorCode(), e.getMessage());
         }
         return AccountResponse.returnFail(SYSTEM_ERROR, "系统异常");

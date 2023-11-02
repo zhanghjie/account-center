@@ -144,7 +144,7 @@ public class AccountUserInfoService {
         LambdaQueryWrapper<AccountUserPO> wrapper = new LambdaQueryWrapper<>();
         wrapper.eq(AccountUserPO::getPhone, accountUserInfo.getPhone());
         AccountUserPO accountUserPO = accountUserMapper.selectOne(wrapper);
-        if (Objects.isNull(accountUserPO)) {
+        if (Objects.nonNull(accountUserPO)) {
             throw new AccountCenterException("用户已存在");
         }
         BeanUtils.copyProperties(accountUserInfo, accountUserPO);

@@ -1,4 +1,4 @@
-package com.hzjt.platform.account.user.instructure.utils;
+package com.hzjt.platform.account.user.infrastructure.utils;
 
 import java.util.concurrent.LinkedBlockingQueue;
 import java.util.concurrent.ThreadPoolExecutor;

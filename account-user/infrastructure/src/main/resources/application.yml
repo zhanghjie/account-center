@@ -1,0 +1,22 @@
+server:
+  port: 8011
+
+account:
+  center:
+    url: http://192.168.31.173:8011
+  login:
+    autologinpage: false
+    location:
+      url: http://192.168.31.173:8011
+
+#spring config
+spring:
+  profiles:
+    active: dev
+    mvc:
+      pathmatch.matching-strategy: ant_path_matcher
+    application:
+      name: account-center
+mybatis-plus:
+  configuration:
+    log-impl: org.apache.ibatis.logging.stdout.StdOutImpl

@@ -1,9 +1,0 @@
-server:
-  port: 8011
-account:
-  center:
-    url: http://192.168.31.173:8011
-  login:
-    autologinpage: false
-    location:
-      url: http://www.baidu.com

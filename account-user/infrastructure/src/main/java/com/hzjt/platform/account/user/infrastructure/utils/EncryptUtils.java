@@ -1,4 +1,4 @@
-package com.hzjt.platform.account.user.instructure.utils;
+package com.hzjt.platform.account.user.infrastructure.utils;
 
 
 import org.apache.tomcat.util.codec.binary.Base64;

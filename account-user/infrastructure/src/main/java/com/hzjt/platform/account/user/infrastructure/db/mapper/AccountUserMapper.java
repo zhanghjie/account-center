@@ -1,7 +1,7 @@
-package com.hzjt.platform.account.user.instructure.db.mapper;
+package com.hzjt.platform.account.user.infrastructure.db.mapper;
 
 import com.baomidou.mybatisplus.core.mapper.BaseMapper;
-import com.hzjt.platform.account.user.instructure.db.entity.AccountUserPO;
+import com.hzjt.platform.account.user.infrastructure.db.entity.AccountUserPO;
 
 /**
  * @author zhanghaojie

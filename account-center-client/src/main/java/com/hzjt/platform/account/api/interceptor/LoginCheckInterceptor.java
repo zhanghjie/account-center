@@ -107,14 +107,13 @@ public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
     }
 
     private Boolean request302(HttpServletRequest request, HttpServletResponse response) {
-        String requestURI = request.getRequestURL().toString();
-
+        String completeURLWithQueryString = request.getRequestURL().toString() + "?" + request.getQueryString();
         // 设置302跳转
         response.setStatus(HttpServletResponse.SC_FOUND);
 
         // requestURI为登录成功后再跳转的url
         try {
-            response.sendRedirect(locationUrl + "?redirect=" + requestURI);
+            response.sendRedirect(locationUrl + "?redirect=" + completeURLWithQueryString);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }

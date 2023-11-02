@@ -1,4 +1,4 @@
-package com.hzjt.platform.account.user.instructure.db.entity;
+package com.hzjt.platform.account.user.infrastructure.db.entity;
 
 import java.util.Date;
 

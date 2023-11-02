@@ -39,7 +39,7 @@ public class NewAccountUserInfo implements Serializable {
     /**
      * 用户身份证号(加密后)
      */
-    private Integer idCardNo;
+    private String idCardNo;
 
     /**
      * 最后登录时间
@@ -121,11 +121,11 @@ public class NewAccountUserInfo implements Serializable {
         this.idCardName = idCardName;
     }
 
-    public Integer getIdCardNo() {
+    public String getIdCardNo() {
         return idCardNo;
     }
 
-    public void setIdCardNo(Integer idCardNo) {
+    public void setIdCardNo(String idCardNo) {
         this.idCardNo = idCardNo;
     }
 

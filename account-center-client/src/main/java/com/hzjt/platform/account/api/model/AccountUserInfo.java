@@ -11,6 +11,9 @@ import java.util.Date;
  * @date 2023/10/26 10:27
  */
 public class AccountUserInfo implements Serializable {
+
+    private String accountToken;
+
     /**
      * 用户地址
      */
@@ -55,7 +58,6 @@ public class AccountUserInfo implements Serializable {
      * 昵称
      */
     private String nickName;
-
 
     /**
      * 手机号(加密后)
@@ -205,5 +207,13 @@ public class AccountUserInfo implements Serializable {
 
     public void setUserName(String userName) {
         this.userName = userName;
+    }
+
+    public String getAccountToken() {
+        return accountToken;
+    }
+
+    public void setAccountToken(String accountToken) {
+        this.accountToken = accountToken;
     }
 }

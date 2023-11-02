@@ -47,7 +47,7 @@ public class PermissionsInterceptor implements HandlerInterceptor, Ordered {
             try {
                 // 如果只是返回
                 if (!accountUserPermission.verifyThatTheUserHasPermissions(accountUserInfo)) {
-                    return requestError(response, "10001", "系统异常");
+                    return requestError(response, "10021", "用户权限不足");
                 }
             } catch (AccountCenterException ac) {
                 return requestError(response, ac.getErrorCode(), ac.getMessage());

@@ -32,6 +32,9 @@ public class EncryptUtils {
 
 
     private static final String PHONE_KEY = "fdijnsgasonj00013r8";
+
+    private static final String ID_CARE_KEY = "1254iohnio.aogi123!!@#";
+
     private static final String PASSWORD_KEY = "opietr-0132245";
 
     /**
@@ -42,6 +45,16 @@ public class EncryptUtils {
      */
     public static String encryptPhone(String data) {
         return encrypt(data, PHONE_KEY);
+    }
+
+    /**
+     * 对身份证号进行加密
+     *
+     * @param idCareNo 身份证号
+     * @return 加密后的身份证号
+     */
+    public static String encryptIdCareNo(String idCareNo) {
+        return encrypt(idCareNo, ID_CARE_KEY);
     }
 
     /**

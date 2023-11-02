@@ -1,6 +1,7 @@
 package com.hzjt.platform.account.user.instructure.db.entity;
 
 import com.baomidou.mybatisplus.annotation.TableName;
+import com.hzjt.platform.account.api.utils.TokenAlgorithmUtils;
 import lombok.Data;
 
 import java.util.Date;
@@ -49,7 +50,7 @@ public class AccountUserPO {
     /**
      * 用户身份证号
      */
-    private Integer idCardNo;
+    private String idCardNo;
 
     /**
      * 最后登录时间
@@ -96,5 +97,11 @@ public class AccountUserPO {
      */
     private String userName;
 
+    public String getAccountToken() {
+        return TokenAlgorithmUtils.encrypt(this.id + "");
+    }
 
+    public String getRefreshToken() {
+        return TokenAlgorithmUtils.encrypt(this.phone + "");
+    }
 }

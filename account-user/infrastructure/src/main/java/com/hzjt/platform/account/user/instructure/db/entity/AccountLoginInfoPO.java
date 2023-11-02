@@ -1,9 +1,8 @@
 package com.hzjt.platform.account.user.instructure.db.entity;
 
-import com.baomidou.mybatisplus.annotation.TableName;
-
 import java.util.Date;
 
+import com.baomidou.mybatisplus.annotation.TableName;
 import lombok.Data;
 
 
@@ -16,6 +15,16 @@ import lombok.Data;
 @TableName("account_login_info")
 @Data
 public class AccountLoginInfoPO {
+
+    /**
+     * OAuth登录中间code
+     */
+    private String accountCode;
+
+    /**
+     * 执行登录的客户端
+     */
+    private String clientCode;
 
     /**
      * 创建时间
@@ -58,4 +67,13 @@ public class AccountLoginInfoPO {
     private Long userId;
 
 
+    /**
+     * token有效时间
+     */
+    private Date tokenValidityTime;
+
+    /**
+     * 登录渠道
+     */
+    private String loginChannel;
 }

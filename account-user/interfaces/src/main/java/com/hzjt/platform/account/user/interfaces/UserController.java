@@ -3,6 +3,7 @@ package com.hzjt.platform.account.user.interfaces;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
 import com.hzjt.platform.account.api.model.NewAccountUserInfo;
 import com.hzjt.platform.account.user.domain.AccountUserInfoService;
+import com.hzjt.platform.account.api.model.AccountResponse;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.web.bind.annotation.GetMapping;
@@ -44,19 +45,19 @@ public class UserController {
      * 授权登录
      */
     @GetMapping("login/getAccountCode")
-    public String login(String userName, String password, String clientCode) {
+    public AccountResponse<String> login(String userName, String password, String clientCode) {
         log.info("UserController-login, {}, {}, {}", userName, password, clientCode);
         return accountUserInfoService.checkLoginOAuth2(userName, password, clientCode);
     }
 
     @GetMapping("login")
-    public AccountUserInfo directLogin(String userName, String password, String clientCode) {
+    public AccountResponse<AccountUserInfo> directLogin(String userName, String password, String clientCode) {
         log.info("UserController-directLogin, {}, {}, {}", userName, password, clientCode);
         return accountUserInfoService.doLogin(userName, password, clientCode);
     }
 
     @PostMapping("/registry/newUser")
-    public Boolean registryNewUser(@RequestBody NewAccountUserInfo newAccountUserInfo) {
+    public AccountResponse<Boolean> registryNewUser(@RequestBody NewAccountUserInfo newAccountUserInfo) {
         return accountUserInfoService.registerNewUser(newAccountUserInfo);
     }
 
@@ -64,14 +65,14 @@ public class UserController {
      * token获取用户信息
      */
     @GetMapping("/login/getUserInfoByToken")
-    public AccountUserInfo getUserInfoByToken(String accountToken) {
+    public AccountResponse<AccountUserInfo> getUserInfoByToken(String accountToken) {
         log.info("getAccountUerInfoByUserId-getUserInfoByToken:{}", accountToken);
         return accountUserInfoService.getAccountUserInfoByToken(accountToken);
     }
 
 
     @GetMapping("/info/getUerInfoByUserId")
-    public AccountUserInfo getUerInfoByUserId(Long userId) {
+    public AccountResponse<AccountUserInfo> getUerInfoByUserId(Long userId) {
         log.info("UserController-getUserInfoByToken:{}", userId);
         return accountUserInfoService.getAccountUerInfoByUserId(userId);
     }

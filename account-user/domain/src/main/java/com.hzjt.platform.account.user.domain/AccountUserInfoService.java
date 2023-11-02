@@ -6,6 +6,7 @@ import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hzjt.platform.account.api.exception.AccountCenterException;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
 import com.hzjt.platform.account.api.model.NewAccountUserInfo;
+import com.hzjt.platform.account.api.model.AccountResponse;
 import com.hzjt.platform.account.user.infrastructure.db.entity.AccountLoginInfoPO;
 import com.hzjt.platform.account.user.infrastructure.db.entity.AccountUserPO;
 import com.hzjt.platform.account.user.infrastructure.db.mapper.AccountLoginInfoMapper;
@@ -45,11 +46,11 @@ public class AccountUserInfoService {
      * @param username
      * @return 用户信息
      */
-    public String checkLoginOAuth2(String username, String password, String clientCode) {
+    public AccountResponse<String> checkLoginOAuth2(String username, String password, String clientCode) {
         // 检验登录密码
         check(username, password);
         // 获取account_code
-        return TokenAlgorithmUtils.encrypt(String.valueOf(username));
+        return AccountResponse.returnSuccess(TokenAlgorithmUtils.encrypt(String.valueOf(username)));
     }
 
 
@@ -61,7 +62,7 @@ public class AccountUserInfoService {
      * @param username
      * @return 用户信息
      */
-    public AccountUserInfo doLogin(String username, String password, String clientCode) {
+    public AccountResponse<AccountUserInfo> doLogin(String username, String password, String clientCode) {
         // 账号密码检验成功，单点登录
         AccountUserPO accountUserPO = check(username, password);
         String accountToken = accountUserPO.getAccountToken();
@@ -70,7 +71,7 @@ public class AccountUserInfoService {
         BeanUtils.copyProperties(accountUserPO, result);
         result.setAccountToken(accountToken);
         saveTokenInfo(clientCode, accountUserPO, accountToken, refreshToken);
-        return result;
+        return AccountResponse.returnSuccess(result);
     }
 
     private void saveTokenInfo(String clientCode, AccountUserPO accountUserPO, String accountToken, String refreshToken) {
@@ -95,7 +96,7 @@ public class AccountUserInfoService {
      * @param accountToken 用户ID
      * @return 用户信息
      */
-    public AccountUserInfo getAccountUserInfoByToken(String accountToken) {
+    public AccountResponse<AccountUserInfo> getAccountUserInfoByToken(String accountToken) {
         LambdaQueryWrapper<AccountLoginInfoPO> queryWrapper = new LambdaQueryWrapper<>();
         queryWrapper.eq(AccountLoginInfoPO::getToken, accountToken);
         AccountLoginInfoPO accountLoginInfoPOS = accountLoginInfoMapper.selectOne(queryWrapper);
@@ -106,7 +107,7 @@ public class AccountUserInfoService {
             throw new AccountCenterException("登录已失效，请重新登录");
         }
         AccountUserPO accountUserPO = accountUserMapper.selectById(accountLoginInfoPOS.getUserId());
-        return beanUtilsToInfo(accountUserPO);
+        return AccountResponse.returnSuccess(beanUtilsToInfo(accountUserPO));
     }
 
     /**
@@ -115,12 +116,12 @@ public class AccountUserInfoService {
      * @param userId 用户ID
      * @return 用户信息
      */
-    public AccountUserInfo getAccountUerInfoByUserId(Long userId) {
+    public AccountResponse<AccountUserInfo> getAccountUerInfoByUserId(Long userId) {
         AccountUserPO accountUserPO = accountUserMapper.selectById(userId);
         if (Objects.isNull(accountUserPO)) {
             throw new AccountCenterException("用户不存在");
         }
-        return beanUtilsToInfo(accountUserPO);
+        return AccountResponse.returnSuccess(beanUtilsToInfo(accountUserPO));
     }
 
 
@@ -130,7 +131,7 @@ public class AccountUserInfoService {
      * @param accountUserInfo 用户信息
      * @return 用户信息
      */
-    public Boolean registerNewUser(NewAccountUserInfo accountUserInfo) {
+    public AccountResponse<Boolean> registerNewUser(NewAccountUserInfo accountUserInfo) {
         // 检验手机验证码是否正确
         // todo
 
@@ -160,7 +161,7 @@ public class AccountUserInfoService {
         accountUserPO.setId(null);
         accountUserPO.setCreateTime(new Date());
         accountUserPO.setUpdateTime(new Date());
-        return accountUserMapper.insert(accountUserPO) > 0;
+        return AccountResponse.returnSuccess(accountUserMapper.insert(accountUserPO) > 0);
     }
 
 

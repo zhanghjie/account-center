@@ -1,6 +1,7 @@
 package com.hzjt.platform.account.api.utils;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
+import com.hzjt.platform.account.api.model.AccountResponse;
 import lombok.SneakyThrows;
 import lombok.extern.slf4j.Slf4j;
 import org.apache.http.Header;
@@ -28,6 +29,7 @@ import java.io.InputStream;
 import java.io.InputStreamReader;
 import java.util.HashMap;
 import java.util.Map;
+import java.util.Objects;
 
 /**
  * HttpClientUtil
@@ -335,6 +337,10 @@ public class HttpClientUtil {
             // 创建ObjectMapper对象
             ObjectMapper objectMapper = new ObjectMapper();
             // 将JSON字符串转换为对象
+            AccountResponse accountResponse = objectMapper.readValue(result, AccountResponse.class);
+            if (Objects.isNull(accountResponse.getData())){
+                return null;
+            }
             return objectMapper.readValue(result, responseType);
         } catch (Exception e) {
             log.error("HttpClientUtil conversion exception result:{}", e.getMessage());

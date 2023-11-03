@@ -27,7 +27,7 @@ public class AccountUserInfo implements Serializable {
     /**
      * 用户注册时间
      */
-    private Date createTime;
+    private String createTime;
 
     /**
      * 用户邮箱
@@ -52,7 +52,7 @@ public class AccountUserInfo implements Serializable {
     /**
      * 最后登录时间
      */
-    private Date lastLoginTime;
+    private String lastLoginTime;
 
     /**
      * 昵称
@@ -82,7 +82,7 @@ public class AccountUserInfo implements Serializable {
     /**
      * 用户更新时间
      */
-    private Date updateTime;
+    private String updateTime;
 
     /**
      * 用户名
@@ -105,11 +105,11 @@ public class AccountUserInfo implements Serializable {
         this.birthday = birthday;
     }
 
-    public Date getCreateTime() {
+    public String getCreateTime() {
         return createTime;
     }
 
-    public void setCreateTime(Date createTime) {
+    public void setCreateTime(String createTime) {
         this.createTime = createTime;
     }
 
@@ -145,11 +145,11 @@ public class AccountUserInfo implements Serializable {
         this.idCardNo = idCardNo;
     }
 
-    public Date getLastLoginTime() {
+    public String getLastLoginTime() {
         return lastLoginTime;
     }
 
-    public void setLastLoginTime(Date lastLoginTime) {
+    public void setLastLoginTime(String lastLoginTime) {
         this.lastLoginTime = lastLoginTime;
     }
 
@@ -193,11 +193,11 @@ public class AccountUserInfo implements Serializable {
         this.type = type;
     }
 
-    public Date getUpdateTime() {
+    public String getUpdateTime() {
         return updateTime;
     }
 
-    public void setUpdateTime(Date updateTime) {
+    public void setUpdateTime(String updateTime) {
         this.updateTime = updateTime;
     }
 

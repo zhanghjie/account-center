@@ -18,6 +18,8 @@ import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -170,7 +172,17 @@ public class AccountUserInfoService {
         AccountUserInfo accountUserInfo = new AccountUserInfo();
         accountUserInfo.setUserId(accountUserPO.getId());
         BeanUtils.copyProperties(accountUserPO, accountUserInfo);
+        accountUserInfo.setCreateTime(parseDate(accountUserPO.getCreateTime()));
         return accountUserInfo;
+    }
+    private String parseDate(Date dateStr) {
+        // 将Date转出yyyy-mm-dd HH:mm:ss格式
+        if (dateStr != null) {
+            SimpleDateFormat sdf = new SimpleDateFormat("yyyy-MM-dd HH:mm:ss");
+            return sdf.format(dateStr);
+        } else {
+            return null;
+        }
     }
 
 

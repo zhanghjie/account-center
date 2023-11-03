@@ -16,17 +16,21 @@ public class AccountResponse<T> implements Serializable {
     private static final long serialVersionUID = 1L;
 
     public static final String SUCCESS_CODE = "success";
-//    @ApiModelProperty("状态码")
+    //    @ApiModelProperty("状态码")
     @Getter
     private String code;
-//    @ApiModelProperty("信息说明")
+    //    @ApiModelProperty("信息说明")
     @Getter
     private String msg;
-//    @ApiModelProperty("状态")
+    //    @ApiModelProperty("状态")
     @Getter
     private Boolean isSuccess;
-//    @ApiModelProperty("数据内容")
+    //    @ApiModelProperty("数据内容")
     private T data;
+
+    // 无参构造器
+    public AccountResponse() {
+    }
 
     private AccountResponse(String code) {
         this.code = code;

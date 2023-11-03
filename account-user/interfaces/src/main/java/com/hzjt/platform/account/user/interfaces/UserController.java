@@ -50,16 +50,33 @@ public class UserController {
         return accountUserInfoService.checkLoginOAuth2(userName, password, clientCode);
     }
 
+
+    /**
+     * 直接登录方法
+     *
+     * @param userName   用户名
+     * @param password   密码
+     * @param clientCode 客户端代码
+     * @return 登录结果
+     */
     @GetMapping("login")
-    public AccountResponse<AccountUserInfo> directLogin(String userName, String password, String clientCode) {
-        log.info("UserController-directLogin, {}, {}, {}", userName, password, clientCode);
-        return accountUserInfoService.doLogin(userName, password, clientCode);
+    public AccountResponse<AccountUserInfo> directLogin(String userName, String passWord, String clientCode) {
+        log.info("UserController-directLogin, {}, {}, {}", userName, passWord, clientCode);
+        return accountUserInfoService.doLogin(userName, passWord, clientCode);
     }
 
+
+    /**
+     * 注册新用户
+     *
+     * @param newAccountUserInfo 新用户的信息
+     * @return 注册结果
+     */
     @PostMapping("/registry/newUser")
     public AccountResponse<Boolean> registryNewUser(@RequestBody NewAccountUserInfo newAccountUserInfo) {
         return accountUserInfoService.registerNewUser(newAccountUserInfo);
     }
+
 
     /**
      * token获取用户信息

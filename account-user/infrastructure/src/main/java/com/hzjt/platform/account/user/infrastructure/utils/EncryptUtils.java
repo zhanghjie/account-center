@@ -10,6 +10,7 @@ import javax.crypto.spec.DESKeySpec;
 import java.security.Key;
 import java.security.SecureRandom;
 import java.util.Arrays;
+import java.util.UUID;
 
 /**
  * 加密解密工具类<br/>
@@ -30,12 +31,15 @@ public class EncryptUtils {
      */
     private static final String CIPHER_ALGORITHM = "DES/ECB/NoPadding";
 
+    public static void main(String[] args) {
+        String randomHex = UUID.randomUUID().toString().replace("-", "");
+        System.out.println(randomHex);
+    }
+    private static final String PHONE_KEY = "ca6ecb2947a04190b2f66ebf02ae7679";
 
-    private static final String PHONE_KEY = "fdijnsgasonj00013r8";
+    private static final String ID_CARE_KEY = "fb78b345c23546aca844b1a5";
 
-    private static final String ID_CARE_KEY = "1254iohnio.aogi123!!@#";
-
-    private static final String PASSWORD_KEY = "opietr-0132245";
+    private static final String PASSWORD_KEY = "fb78b345b8da4c948c5bf492c8a820e7";
 
     /**
      * 对手机号进行加密

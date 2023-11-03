@@ -24,8 +24,11 @@ public class AccountCenterWebMvcConfigurerAdapter extends WebMvcConfigurerAdapte
     @Override
     public void addInterceptors(InterceptorRegistry registry) {
         registry.addInterceptor(loginCheckInterceptor)
-                .addPathPatterns("/**");  // 拦截所有的请求
+                .addPathPatterns("/**")
+                .excludePathPatterns("*.html", "*.js", "*.css");
+        // 拦截权限
         registry.addInterceptor(permissionsInterceptor)
-                .addPathPatterns("/**");  // 拦截所有的请求
+                .addPathPatterns("/**")
+                .excludePathPatterns("*.html", "*.js", "*.css");
     }
 }

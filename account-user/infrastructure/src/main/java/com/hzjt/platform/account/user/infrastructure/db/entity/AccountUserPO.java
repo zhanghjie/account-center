@@ -1,5 +1,7 @@
 package com.hzjt.platform.account.user.infrastructure.db.entity;
 
+import com.baomidou.mybatisplus.annotation.IdType;
+import com.baomidou.mybatisplus.annotation.TableId;
 import com.baomidou.mybatisplus.annotation.TableName;
 import com.hzjt.platform.account.api.utils.TokenAlgorithmUtils;
 import lombok.Data;
@@ -40,6 +42,7 @@ public class AccountUserPO {
     /**
      * id
      */
+    @TableId(type = IdType.AUTO)
     private Long id;
 
     /**
@@ -97,11 +100,11 @@ public class AccountUserPO {
      */
     private String userName;
 
-    public String getAccountToken() {
+    public String getUserAccountToken() {
         return TokenAlgorithmUtils.encrypt(this.id + "");
     }
 
-    public String getRefreshToken() {
+    public String getUserRefreshToken() {
         return TokenAlgorithmUtils.encrypt(this.phone + "");
     }
 }

@@ -37,14 +37,9 @@ public class NewAccountUserInfo implements Serializable {
     private String idCardName;
 
     /**
-     * 用户身份证号(加密后)
+     * 用户身份证号
      */
     private String idCardNo;
-
-    /**
-     * 最后登录时间
-     */
-    private Date lastLoginTime;
 
     /**
      * 昵称
@@ -129,13 +124,6 @@ public class NewAccountUserInfo implements Serializable {
         this.idCardNo = idCardNo;
     }
 
-    public Date getLastLoginTime() {
-        return lastLoginTime;
-    }
-
-    public void setLastLoginTime(Date lastLoginTime) {
-        this.lastLoginTime = lastLoginTime;
-    }
 
     public String getNickName() {
         return nickName;

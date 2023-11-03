@@ -65,8 +65,8 @@ public class AccountUserInfoService {
     public AccountResponse<AccountUserInfo> doLogin(String username, String password, String clientCode) {
         // 账号密码检验成功，单点登录
         AccountUserPO accountUserPO = check(username, password);
-        String accountToken = accountUserPO.getAccountToken();
-        String refreshToken = accountUserPO.getRefreshToken();
+        String accountToken = accountUserPO.getUserAccountToken();
+        String refreshToken = accountUserPO.getUserRefreshToken();
         AccountUserInfo result = new AccountUserInfo();
         BeanUtils.copyProperties(accountUserPO, result);
         result.setAccountToken(accountToken);
@@ -103,7 +103,7 @@ public class AccountUserInfoService {
         if (accountLoginInfoPOS == null) {
             throw new AccountCenterException("用户未登录");
         }
-        if (accountLoginInfoPOS.getLoginOutTime() != null || accountLoginInfoPOS.getCreateTime().getTime() < new Date().getTime()) {
+        if (accountLoginInfoPOS.getLoginOutTime() != null || accountLoginInfoPOS.getTokenValidityTime().getTime() < new Date().getTime()) {
             throw new AccountCenterException("登录已失效，请重新登录");
         }
         AccountUserPO accountUserPO = accountUserMapper.selectById(accountLoginInfoPOS.getUserId());
@@ -142,18 +142,19 @@ public class AccountUserInfoService {
             throw new AccountCenterException("用户手机号不可为空");
         }
         LambdaQueryWrapper<AccountUserPO> wrapper = new LambdaQueryWrapper<>();
-        wrapper.eq(AccountUserPO::getPhone, accountUserInfo.getPhone());
+        wrapper.eq(AccountUserPO::getPhone, EncryptUtils.encryptPhone(accountUserInfo.getPhone()));
         AccountUserPO accountUserPO = accountUserMapper.selectOne(wrapper);
         if (Objects.nonNull(accountUserPO)) {
             throw new AccountCenterException("用户已存在");
         }
+        accountUserPO = new AccountUserPO();
         BeanUtils.copyProperties(accountUserInfo, accountUserPO);
         if (StringUtils.isNotBlank(accountUserInfo.getPassWord())) {
             //密码需要加密保存
             accountUserPO.setPassWord(EncryptUtils.encryptUserPassWord(accountUserInfo.getPassWord()));
         }
-        if (StringUtils.isNotBlank(accountUserInfo.getPassWord())) {
-            //密码需要加密保存
+        if (StringUtils.isNotBlank(accountUserInfo.getIdCardNo())) {
+            //身份证号需要加密保存
             accountUserPO.setIdCardNo(EncryptUtils.encryptIdCareNo(accountUserInfo.getIdCardNo()));
         }
         // 手机是必填的
@@ -202,7 +203,7 @@ public class AccountUserInfoService {
         infoPOLambdaQueryWrapper.isNull(AccountLoginInfoPO::getLoginOutTime);
         infoPOLambdaQueryWrapper.gt(AccountLoginInfoPO::getTokenValidityTime, new Date());
         List<AccountLoginInfoPO> accountLoginInfoPOS = accountLoginInfoMapper.selectList(infoPOLambdaQueryWrapper);
-        if (CollectionUtils.isEmpty(accountLoginInfoPOS)) {
+        if (CollectionUtils.isNotEmpty(accountLoginInfoPOS)) {
             throw new AccountCenterException("请勿重复登录");
         }
 

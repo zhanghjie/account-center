@@ -16,6 +16,7 @@ import org.springframework.web.servlet.HandlerInterceptor;
 import org.springframework.web.servlet.ModelAndView;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
+import javax.servlet.http.Cookie;
 import javax.servlet.http.HttpServletRequest;
 import javax.servlet.http.HttpServletResponse;
 import java.io.IOException;
@@ -34,9 +35,10 @@ import java.util.Objects;
 @Slf4j
 public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
 
+    private String account_token = "account-token";
 
     // 自定义跳转页面
-    @Value("${account.login.location.url:#{\"https://www.example.com/new-location\"}}")
+    @Value("${account.login.location.url:#{\"http://192.168.31.173:8011/login.html\"}}")
     private String locationUrl;
 
     // 自定义跳转页面
@@ -85,6 +87,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
             } else if (Objects.isNull(userInfo) && !ignoreUrl) {
                 return request302(request, response);
             }
+            response.setHeader(account_token, accountToken);
+            setCookie(response, accountToken);
             return true;
         }
         if (accountLoginAutoLoginPage) {
@@ -92,6 +96,12 @@ public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
         }
         // 设置302跳转
         return request302(request, response);
+    }
+
+    private void setCookie(HttpServletResponse response, String accountToken) {
+        Cookie cookie = new Cookie(this.account_token, accountToken);
+        cookie.setPath("/");
+        response.addCookie(cookie);
     }
 
     private Boolean requestNoLogin(HttpServletRequest request, HttpServletResponse response) throws Exception {

@@ -1,6 +1,7 @@
 package com.hzjt.platform.account.api;
 
 import com.hzjt.platform.account.api.model.AccountUserInfo;
+import com.hzjt.platform.account.api.model.NewAccountUserInfo;
 
 /**
  * AccountCenterUserService
@@ -49,7 +50,7 @@ public interface AccountCenterUserService {
     /**
      * 注册用户,code为注册时的验证码
      */
-    AccountUserInfo registryUser(AccountUserInfo user);
+    Boolean registryUser(NewAccountUserInfo user);
 
     /**
      * 修改用户信息

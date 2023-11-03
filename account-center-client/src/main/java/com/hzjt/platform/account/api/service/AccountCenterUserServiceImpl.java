@@ -129,7 +129,7 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
      * @param code
      */
     @Override
-    public AccountUserInfo registryUser(NewAccountUserInfo user) {
+    public Boolean registryUser(NewAccountUserInfo user) {
         String remoteServiceUrl = "/registry/login/newUser"; // 远程服务的URL
         return HttpClientUtil.doJsonPost(accountCenterUrl + remoteServiceUrl, JSON.toJSONString(user), null,
                 Boolean.class);

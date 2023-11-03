@@ -2,6 +2,7 @@ package com.hzjt.platform.account.api.service;
 
 import com.alibaba.fastjson.JSON;
 import com.hzjt.platform.account.api.AccountCenterUserService;
+import com.hzjt.platform.account.api.model.AccountResponse;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
 import com.hzjt.platform.account.api.model.NewAccountUserInfo;
 import com.hzjt.platform.account.api.utils.HttpClientUtil;
@@ -131,8 +132,9 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
     @Override
     public Boolean registryUser(NewAccountUserInfo user) {
         String remoteServiceUrl = "/registry/login/newUser"; // 远程服务的URL
-        return HttpClientUtil.doJsonPost(accountCenterUrl + remoteServiceUrl, JSON.toJSONString(user), null,
-                Boolean.class);
+        String result = HttpClientUtil.doJsonPost(accountCenterUrl + remoteServiceUrl, JSON.toJSONString(user), null);
+        AccountResponse accountResponse = JSON.parseObject(result, AccountResponse.class);
+        return (Boolean) accountResponse.getData();
 
     }
 

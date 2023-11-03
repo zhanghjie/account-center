@@ -49,7 +49,7 @@ public interface AccountCenterUserService {
     /**
      * 注册用户,code为注册时的验证码
      */
-    AccountUserInfo registryUser(AccountUserInfo user, String code);
+    AccountUserInfo registryUser(AccountUserInfo user);
 
     /**
      * 修改用户信息

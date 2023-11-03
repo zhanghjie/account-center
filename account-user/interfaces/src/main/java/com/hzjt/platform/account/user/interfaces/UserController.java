@@ -67,6 +67,21 @@ public class UserController {
 
 
     /**
+     * 登出方法
+     *
+     * @param userName     用户名
+     * @param accountToken token
+     * @param clientCode   客户端代码
+     * @return 登录结果
+     */
+    @GetMapping("/login/loginOut")
+    public AccountResponse<Boolean> loginOut(Long userId, String userName, String accountToken, String clientCode) {
+        log.info("UserController-directLogin, {}, {}, {}", userName, accountToken, clientCode);
+        return accountUserInfoService.loginOut(userId, userName, accountToken, clientCode);
+    }
+
+
+    /**
      * 注册新用户
      *
      * @param newAccountUserInfo 新用户的信息
@@ -92,5 +107,18 @@ public class UserController {
     public AccountResponse<AccountUserInfo> getUerInfoByUserId(Long userId) {
         log.info("UserController-getUserInfoByToken:{}", userId);
         return accountUserInfoService.getAccountUerInfoByUserId(userId);
+    }
+
+
+    @GetMapping("/info/getUserInfoByPhone")
+    public AccountResponse<AccountUserInfo> getUserInfoByPhone(String phone) {
+        log.info("UserController-getUserInfoByPhone:{}", phone);
+        return accountUserInfoService.getUserInfoByPhone(phone);
+    }
+
+    @GetMapping("/info/getUserInfoByUsername")
+    public AccountResponse<AccountUserInfo> getUserInfoByUsername(String userName) {
+        log.info("UserController-getUserInfoByUsername:{}", userName);
+        return accountUserInfoService.getUserInfoByUserName(userName);
     }
 }

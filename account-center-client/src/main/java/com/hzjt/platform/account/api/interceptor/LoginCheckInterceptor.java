@@ -35,7 +35,7 @@ import java.util.Objects;
 @Slf4j
 public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
 
-    private String account_token = "account-token";
+    private final String ACCOUNT_TOKEN = "account-token";
 
     // 自定义跳转页面
     @Value("${account.login.location.url:#{\"http://192.168.31.173:8011/login.html\"}}")
@@ -68,15 +68,8 @@ public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
         // 如果返回false，则请求将被拦截，不会被继续处理
         System.out.println("Interceptor: preHandle method is called");
         // 从请求头中获取token字符串并解析
-        String accountToken;
-        try {
-            accountToken = request.getHeader("account-token");
-            if (Objects.isNull(accountToken) || Objects.equals(accountToken, "")) {
-                accountToken = request.getParameter("account-token");
-            }
-        } catch (Exception e) {
-            throw new RuntimeException("系统异常");
-        }
+        String accountToken = getAccountToken(request, response);
+
         Boolean ignoreUrl = isIgnoreUrl(findHandlerMethod(request));
         if (ignoreUrl && Objects.isNull(accountToken)) {
             return true;
@@ -87,8 +80,6 @@ public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
             } else if (Objects.isNull(userInfo) && !ignoreUrl) {
                 return request302(request, response);
             }
-            response.setHeader(account_token, accountToken);
-            setCookie(response, accountToken);
             return true;
         }
         if (accountLoginAutoLoginPage) {
@@ -99,10 +90,40 @@ public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
     }
 
     private void setCookie(HttpServletResponse response, String accountToken) {
-        Cookie cookie = new Cookie(this.account_token, accountToken);
+        response.setHeader(ACCOUNT_TOKEN, accountToken);
+        Cookie cookie = new Cookie(this.ACCOUNT_TOKEN, accountToken);
         cookie.setPath("/");
         response.addCookie(cookie);
     }
+
+
+        /**
+     * 获取账户令牌
+     * 从请求中获取账户令牌，顺序查找请求头、参数和Cookie
+     * @param request HTTP请求对象
+     * @param response HTTP响应对象
+     * @return 获取到的账户令牌
+     */
+    private String getAccountToken(HttpServletRequest request, HttpServletResponse response) {
+        String accountToken;
+        try {
+            accountToken = request.getHeader(ACCOUNT_TOKEN);
+            if (Objects.isNull(accountToken) || Objects.equals(accountToken, "")) {
+                accountToken = request.getParameter(ACCOUNT_TOKEN);
+            }
+            Cookie[] cookies = request.getCookies();
+            for (Cookie cookiecookie : cookies) {
+                if (Objects.equals(cookiecookie.getName(), ACCOUNT_TOKEN)) {
+                    accountToken = cookiecookie.getValue();
+                }
+            }
+            setCookie(response, accountToken);
+        } catch (Exception e) {
+            throw new RuntimeException("系统异常");
+        }
+        return accountToken;
+    }
+
 
     private Boolean requestNoLogin(HttpServletRequest request, HttpServletResponse response) throws Exception {
         // 设置响应内容类型为 JSON

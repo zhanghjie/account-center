@@ -30,6 +30,7 @@
         <!-- Spring Cloud 版本 -->
         <spring-cloud.version>2020.0.3</spring-cloud.version>
         <spring.cloud.alibaba.version>2.2.5.RELEASE</spring.cloud.alibaba.version>
+        <fastjson.version>2.0.32</fastjson.version>
     </properties>
     <dependencies>
 

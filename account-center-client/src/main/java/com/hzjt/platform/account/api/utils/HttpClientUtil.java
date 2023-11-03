@@ -1,5 +1,6 @@
 package com.hzjt.platform.account.api.utils;
 
+import com.alibaba.fastjson.JSON;
 import com.fasterxml.jackson.databind.ObjectMapper;
 import com.hzjt.platform.account.api.model.AccountResponse;
 import lombok.SneakyThrows;
@@ -24,9 +25,15 @@ import org.apache.http.impl.nio.client.HttpAsyncClients;
 import org.apache.http.util.EntityUtils;
 import org.springframework.web.multipart.MultipartFile;
 
+import javax.servlet.http.HttpServletRequest;
+import javax.servlet.http.HttpServletResponse;
 import java.io.File;
 import java.io.InputStream;
 import java.io.InputStreamReader;
+import java.lang.reflect.Field;
+import java.text.ParseException;
+import java.text.SimpleDateFormat;
+import java.util.Date;
 import java.util.HashMap;
 import java.util.Map;
 import java.util.Objects;
@@ -332,19 +339,13 @@ public class HttpClientUtil {
         return String.valueOf(result);
     }
 
+
     public static <T> T conversion(String result, Class<T> responseType) {
-        try {
-            // 创建ObjectMapper对象
-            ObjectMapper objectMapper = new ObjectMapper();
-            // 将JSON字符串转换为对象
-            AccountResponse accountResponse = objectMapper.readValue(result, AccountResponse.class);
-            if (Objects.isNull(accountResponse.getData())){
-                return null;
-            }
-            return objectMapper.readValue(result, responseType);
-        } catch (Exception e) {
-            log.error("HttpClientUtil conversion exception result:{}", e.getMessage());
+        AccountResponse accountResponse = JSON.parseObject(result, AccountResponse.class);
+        if (accountResponse.getIsSuccess() && Objects.nonNull(accountResponse.getData())) {
+            return JSON.parseObject(result, responseType);
         }
         return null;
     }
+
 }

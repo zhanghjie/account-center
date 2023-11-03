@@ -1,7 +1,9 @@
 package com.hzjt.platform.account.api.service;
 
+import com.alibaba.fastjson.JSON;
 import com.hzjt.platform.account.api.AccountCenterUserService;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
+import com.hzjt.platform.account.api.model.NewAccountUserInfo;
 import com.hzjt.platform.account.api.utils.HttpClientUtil;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
@@ -27,11 +29,6 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
     @Value("${account.center.url}")
     private String accountCenterUrl;
 
-    @Autowired
-    private Environment environment;
-
-    @Autowired
-    private RestTemplate restTemplate;
 
     /**
      * 根据账号密码进行登录
@@ -45,7 +42,7 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
         params.put("username", username);
         params.put("password", password);
         String remoteServiceUrl = "/user/login"; // 远程服务的URL
-        return restTemplate.getForObject(accountCenterUrl + remoteServiceUrl, AccountUserInfo.class, params);
+        return HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params, AccountUserInfo.class);
     }
 
     /**
@@ -79,7 +76,10 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
      */
     @Override
     public AccountUserInfo getUserInfoByUserId(Long userId) {
-        return null;
+        Map<String, Object> params = new HashMap<>();
+        params.put("userId", userId);
+        String remoteServiceUrl = "/user/info/getUerInfoByUserId"; // 远程服务的URL
+        return HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params, AccountUserInfo.class);
     }
 
     /**
@@ -101,7 +101,11 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
      */
     @Override
     public AccountUserInfo getUserInfoByUsername(String username) {
-        return null;
+        Map<String, Object> params = new HashMap<>();
+        params.put("username", username);
+        String remoteServiceUrl = "/user/info/getUserInfoByUsername"; // 远程服务的URL
+        return HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params, AccountUserInfo.class);
+
     }
 
     /**
@@ -111,7 +115,11 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
      */
     @Override
     public AccountUserInfo getUserInfoByPhone(String phone) {
-        return null;
+        Map<String, Object> params = new HashMap<>();
+        params.put("phone", phone);
+        String remoteServiceUrl = "/user/login/getUserInfoByPhone"; // 远程服务的URL
+        return HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params, AccountUserInfo.class);
+
     }
 
     /**
@@ -121,8 +129,11 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
      * @param code
      */
     @Override
-    public AccountUserInfo registryUser(AccountUserInfo user, String code) {
-        return null;
+    public AccountUserInfo registryUser(NewAccountUserInfo user) {
+        String remoteServiceUrl = "/registry/login/newUser"; // 远程服务的URL
+        return HttpClientUtil.doJsonPost(accountCenterUrl + remoteServiceUrl, JSON.toJSONString(user), null,
+                Boolean.class);
+
     }
 
     /**

@@ -55,6 +55,64 @@ public class AccountUserInfoService {
         return AccountResponse.returnSuccess(TokenAlgorithmUtils.encrypt(String.valueOf(username)));
     }
 
+    /**
+     * 登出账户
+     *
+     * @param userId       用户ID
+     * @param userName     用户名
+     * @param accountToken 账户令牌
+     * @param clientCode   客户端代码
+     * @return 登出结果
+     */
+    public AccountResponse<Boolean> loginOut(Long userId, String userName, String accountToken, String clientCode) {
+        if (Objects.isNull(userId) && StringUtils.isBlank(accountToken) && StringUtils.isBlank(clientCode)) {
+            return AccountResponse.returnFail("10002", "参数错误");
+        }
+        if (StringUtils.isNotBlank(userName)) {
+            AccountUserPO userInfoByUserName = doGetUserInfoByUserName(userName);
+            if (Objects.isNull(userInfoByUserName)) {
+                throw new AccountCenterException("用户不存在");
+            }
+            userId = userInfoByUserName.getId();
+        }
+
+        AccountLoginInfoPO accountLoginInfoPO = new AccountLoginInfoPO();
+        accountLoginInfoPO.setLoginOutTime(new Date());
+        accountLoginInfoPO.setUpdateTime(new Date());
+
+        LambdaQueryWrapper<AccountLoginInfoPO> queryWrapper = new LambdaQueryWrapper<>();
+        queryWrapper.gt(AccountLoginInfoPO::getTokenValidityTime, new Date());
+        if (Objects.nonNull(userId) && userId > 0) {
+            queryWrapper.eq(AccountLoginInfoPO::getUserId, userId);
+        }
+        if (StringUtils.isNotBlank(accountToken)) {
+            queryWrapper.or().eq(AccountLoginInfoPO::getToken, accountToken);
+        }
+        accountLoginInfoMapper.update(accountLoginInfoPO, queryWrapper);
+        return AccountResponse.returnSuccess(true);
+    }
+
+
+    private AccountUserPO doGetUserInfoByUserName(String userName) {
+        AccountUserPO accountUserPO = accountUserMapper.selectOne(new LambdaQueryWrapper<AccountUserPO>().eq(AccountUserPO::getUserName, userName));
+        if (Objects.isNull(accountUserPO)) {
+            throw new AccountCenterException("用户不存在");
+        }
+        return accountUserPO;
+    }
+
+    public AccountResponse<AccountUserInfo> getUserInfoByUserName(String userName) {
+        AccountUserPO accountUserPO = doGetUserInfoByUserName(userName);
+        return AccountResponse.returnSuccess(beanUtilsToInfo(accountUserPO));
+    }
+
+    public AccountResponse<AccountUserInfo> getUserInfoByPhone(String phone) {
+        AccountUserPO accountUserPO = accountUserMapper.selectOne(new LambdaQueryWrapper<AccountUserPO>().eq(AccountUserPO::getPhone, phone));
+        if (Objects.isNull(accountUserPO)) {
+            throw new AccountCenterException("用户不存在");
+        }
+        return AccountResponse.returnSuccess(beanUtilsToInfo(accountUserPO));
+    }
 
     /**
      * 根据用户ID获取用户信息
@@ -175,6 +233,7 @@ public class AccountUserInfoService {
         accountUserInfo.setCreateTime(parseDate(accountUserPO.getCreateTime()));
         return accountUserInfo;
     }
+
     private String parseDate(Date dateStr) {
         // 将Date转出yyyy-mm-dd HH:mm:ss格式
         if (dateStr != null) {

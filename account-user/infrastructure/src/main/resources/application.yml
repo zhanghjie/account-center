@@ -6,6 +6,8 @@ account:
     url: http://192.168.31.173:8011
   login:
     autologinpage: false
+  setting:
+    clientCode : test
 
 
 #spring config

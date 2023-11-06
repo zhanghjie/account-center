@@ -3,6 +3,8 @@ package com.hzjt.platform.account.api;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
 import com.hzjt.platform.account.api.model.NewAccountUserInfo;
 
+import java.util.List;
+
 /**
  * AccountCenterUserService
  * 功能描述：AccountCenterUserService
@@ -15,6 +17,11 @@ public interface AccountCenterUserService {
      * 根据账号密码进行登录
      */
     AccountUserInfo userLogin(String username, String password);
+
+    /**
+     * 根据账号进行登出
+     */
+    Boolean userLoginOut(String username);
 
     /**
      * 根据手机号验证码进行登录
@@ -45,7 +52,7 @@ public interface AccountCenterUserService {
     /**
      * 根据手机号获取用户信息
      */
-    AccountUserInfo getUserInfoByPhone(String phone);
+    List<AccountUserInfo> getUserInfoByPhone(String phone);
 
     /**
      * 注册用户,code为注册时的验证码

@@ -178,6 +178,17 @@ public class HttpClientUtil {
     /**
      * 处理get请求
      *
+     * @param url    地址
+     * @param params 参数
+     * @return
+     */
+    public static String doGet(String url, Map params) {
+        return doGet(url, params, new HashMap());
+    }
+
+    /**
+     * 处理get请求
+     *
      * @param url     地址
      * @param params  参数
      * @param headers 请求头 header key-value

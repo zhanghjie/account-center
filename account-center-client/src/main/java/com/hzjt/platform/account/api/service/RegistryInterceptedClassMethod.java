@@ -7,6 +7,7 @@ import org.springframework.beans.BeansException;
 import org.springframework.beans.factory.BeanInitializationException;
 import org.springframework.beans.factory.InitializingBean;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.beans.factory.config.BeanPostProcessor;
 import org.springframework.boot.ApplicationArguments;
 import org.springframework.boot.ApplicationRunner;
@@ -14,12 +15,14 @@ import org.springframework.context.ApplicationContext;
 import org.springframework.context.ApplicationContextAware;
 import org.springframework.stereotype.Component;
 import org.springframework.util.CollectionUtils;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.mvc.method.RequestMappingInfo;
 import org.springframework.web.servlet.mvc.method.annotation.RequestMappingHandlerMapping;
 
 import javax.annotation.PostConstruct;
 import java.lang.reflect.Method;
+import java.time.OffsetDateTime;
 import java.util.HashSet;
 import java.util.List;
 import java.util.Map;
@@ -35,6 +38,9 @@ import java.util.Set;
 @Component
 public class RegistryInterceptedClassMethod implements ApplicationContextAware, BeanPostProcessor, ApplicationRunner {
 
+    @Value("${account.setting.clientCode}")
+    public String clientCode;
+
     private ApplicationContext applicationContext;
 
     // 需要被拦截校验登录态的接口
@@ -44,6 +50,10 @@ public class RegistryInterceptedClassMethod implements ApplicationContextAware, 
     }
 
     private void registryInterceptedClass() {
+        // 如果连clientCode都是空的那就啥都别干了
+        if (StringUtils.isEmpty(clientCode)) {
+            return;
+        }
         // 获取到所有的InterceptedClass实现类
         Map<String, InterceptedClass> beansOfType = applicationContext.getBeansOfType(InterceptedClass.class);
         if (CollectionUtils.isEmpty(beansOfType)) {
@@ -110,7 +120,5 @@ public class RegistryInterceptedClassMethod implements ApplicationContextAware, 
     public void run(ApplicationArguments args) throws Exception {
         registryInterceptedClass();
     }
-
-
 
 }

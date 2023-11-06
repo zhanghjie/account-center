@@ -11,9 +11,11 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.annotation.Order;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
+import org.springframework.web.bind.annotation.GetMapping;
 import org.springframework.web.client.RestTemplate;
 
 import java.util.HashMap;
+import java.util.List;
 import java.util.Map;
 
 /**
@@ -31,6 +33,9 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
     private String accountCenterUrl;
 
 
+    @Value("${account.setting.clientCode}")
+    public String clientCode;
+
     /**
      * 根据账号密码进行登录
      *
@@ -40,10 +45,19 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
     @Override
     public AccountUserInfo userLogin(String username, String password) {
         Map<String, Object> params = new HashMap<>();
+        params.put("clientCode", clientCode);
         params.put("username", username);
         params.put("password", password);
         String remoteServiceUrl = "/user/login"; // 远程服务的URL
         return HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params, AccountUserInfo.class);
+    }
+
+    public Boolean userLoginOut(String username) {
+        Map<String, Object> params = new HashMap<>();
+        params.put("clientCode", clientCode);
+        params.put("username", username);
+        String remoteServiceUrl = "/login/loginOut"; // 远程服务的URL
+        return HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params, Boolean.class);
     }
 
     /**
@@ -115,22 +129,26 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
      * @param phone
      */
     @Override
-    public AccountUserInfo getUserInfoByPhone(String phone) {
+    public List<AccountUserInfo> getUserInfoByPhone(String phone) {
         Map<String, Object> params = new HashMap<>();
         params.put("phone", phone);
         String remoteServiceUrl = "/user/login/getUserInfoByPhone"; // 远程服务的URL
-        return HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params, AccountUserInfo.class);
-
+        String getResult = HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params);
+        AccountResponse accountResponse = JSON.parseObject(getResult, AccountResponse.class);
+        if (accountResponse.getIsSuccess() && accountResponse.getData() != null) {
+            return JSON.parseArray(accountResponse.getData().toString(), AccountUserInfo.class);
+        }
+        return null;
     }
 
     /**
-     * 注册用户,code为注册时的验证码
+     * 注册用户
      *
      * @param user
-     * @param code
      */
     @Override
     public Boolean registryUser(NewAccountUserInfo user) {
+        user.setClientCode(clientCode);
         String remoteServiceUrl = "/registry/login/newUser"; // 远程服务的URL
         String result = HttpClientUtil.doJsonPost(accountCenterUrl + remoteServiceUrl, JSON.toJSONString(user), null);
         AccountResponse accountResponse = JSON.parseObject(result, AccountResponse.class);
@@ -157,7 +175,9 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
      * @param secret
      */
     @Override
-    public String updateUserInfo(String code, String clinetId, String secret) {
+    public String updateUserInfo(String code, String clientId, String secret) {
         return null;
     }
+
+
 }

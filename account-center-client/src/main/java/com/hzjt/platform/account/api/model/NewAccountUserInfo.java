@@ -76,6 +76,11 @@ public class NewAccountUserInfo implements Serializable {
      */
     private String passWord;
 
+    /**
+     * 账户中心颁布的客户端code
+     */
+    private String clientCode;
+
     public String getSmsVerificationCode() {
         return smsVerificationCode;
     }
@@ -179,5 +184,13 @@ public class NewAccountUserInfo implements Serializable {
 
     public void setPassWord(String passWord) {
         this.passWord = passWord;
+    }
+
+    public String getClientCode() {
+        return clientCode;
+    }
+
+    public void setClientCode(String clientCode) {
+        this.clientCode = clientCode;
     }
 }

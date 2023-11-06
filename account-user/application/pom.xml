@@ -21,5 +21,10 @@
             <artifactId>account-center-client</artifactId>
             <version>${project.version}</version>
         </dependency>
+        <dependency>
+            <groupId>com.hzjt.platform.user</groupId>
+            <artifactId>domain</artifactId>
+            <version>${project.version}</version>
+        </dependency>
     </dependencies>
 </project>

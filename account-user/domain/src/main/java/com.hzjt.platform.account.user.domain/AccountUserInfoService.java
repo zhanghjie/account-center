@@ -4,21 +4,20 @@ import com.baomidou.mybatisplus.core.conditions.query.LambdaQueryWrapper;
 import com.baomidou.mybatisplus.core.toolkit.CollectionUtils;
 import com.baomidou.mybatisplus.core.toolkit.StringUtils;
 import com.hzjt.platform.account.api.exception.AccountCenterException;
+import com.hzjt.platform.account.api.model.AccountResponse;
 import com.hzjt.platform.account.api.model.AccountUserInfo;
 import com.hzjt.platform.account.api.model.NewAccountUserInfo;
-import com.hzjt.platform.account.api.model.AccountResponse;
+import com.hzjt.platform.account.api.utils.TokenAlgorithmUtils;
 import com.hzjt.platform.account.user.infrastructure.db.entity.AccountLoginInfoPO;
 import com.hzjt.platform.account.user.infrastructure.db.entity.AccountUserPO;
 import com.hzjt.platform.account.user.infrastructure.db.mapper.AccountLoginInfoMapper;
 import com.hzjt.platform.account.user.infrastructure.db.mapper.AccountUserMapper;
 import com.hzjt.platform.account.user.infrastructure.utils.AccountThreadPoolManager;
 import com.hzjt.platform.account.user.infrastructure.utils.EncryptUtils;
-import com.hzjt.platform.account.api.utils.TokenAlgorithmUtils;
 import org.springframework.beans.BeanUtils;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
-import java.text.ParseException;
 import java.text.SimpleDateFormat;
 import java.util.Date;
 import java.util.List;
@@ -38,6 +37,7 @@ public class AccountUserInfoService {
 
     @Autowired
     private AccountLoginInfoMapper accountLoginInfoMapper;
+
 
 
     /**
@@ -191,7 +191,7 @@ public class AccountUserInfoService {
      * @param accountUserInfo 用户信息
      * @return 用户信息
      */
-    public AccountResponse<Boolean> registerNewUser(NewAccountUserInfo accountUserInfo) {
+    public AccountResponse<Long> saveNewUser(NewAccountUserInfo accountUserInfo) {
         // 检验手机验证码是否正确
         // todo
 
@@ -217,12 +217,20 @@ public class AccountUserInfoService {
             //身份证号需要加密保存
             accountUserPO.setIdCardNo(EncryptUtils.encryptIdCareNo(accountUserInfo.getIdCardNo()));
         }
-        // 手机是必填的
+        if (StringUtils.isNotBlank(accountUserInfo.getPhone())) {
+            //手机是需要加密保存
+            accountUserPO.setPhone(EncryptUtils.encryptPhone(accountUserInfo.getPhone()));
+        }
         accountUserPO.setPhone(EncryptUtils.encryptPhone(accountUserInfo.getPhone()));
         accountUserPO.setId(null);
         accountUserPO.setCreateTime(new Date());
         accountUserPO.setUpdateTime(new Date());
-        return AccountResponse.returnSuccess(accountUserMapper.insert(accountUserPO) > 0);
+        int insertResult = accountUserMapper.insert(accountUserPO);
+        if (insertResult == 0) {
+            throw new AccountCenterException("注册失败");
+        }
+
+        return AccountResponse.returnSuccess(accountUserPO.getId());
     }
 
 

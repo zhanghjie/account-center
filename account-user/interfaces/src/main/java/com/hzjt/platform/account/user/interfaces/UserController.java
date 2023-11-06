@@ -2,6 +2,7 @@ package com.hzjt.platform.account.user.interfaces;
 
 import com.hzjt.platform.account.api.model.AccountUserInfo;
 import com.hzjt.platform.account.api.model.NewAccountUserInfo;
+import com.hzjt.platform.account.user.application.AccountUserBizServices;
 import com.hzjt.platform.account.user.domain.AccountUserInfoService;
 import com.hzjt.platform.account.api.model.AccountResponse;
 import lombok.extern.slf4j.Slf4j;
@@ -29,6 +30,9 @@ public class UserController {
     @Autowired
     private AccountUserInfoService accountUserInfoService;
 
+    @Autowired
+    private AccountUserBizServices accountUserBizServices;
+
     @GetMapping("login/phone")
     public void loginByPhone(HttpServletResponse response) {
         // 根据手机号查询用户信息
@@ -45,9 +49,9 @@ public class UserController {
      * 授权登录
      */
     @GetMapping("login/getAccountCode")
-    public AccountResponse<String> login(String userName, String password, String clientCode) {
-        log.info("UserController-login, {}, {}, {}", userName, password, clientCode);
-        return accountUserInfoService.checkLoginOAuth2(userName, password, clientCode);
+    public void login(String userName, String password, String clientCode) {
+//        log.info("UserController-login, {}, {}, {}", userName, password, clientCode);
+//        return accountUserInfoService.checkLoginOAuth2(userName, password, clientCode);
     }
 
 
@@ -62,7 +66,7 @@ public class UserController {
     @GetMapping("login")
     public AccountResponse<AccountUserInfo> directLogin(String userName, String passWord, String clientCode) {
         log.info("UserController-directLogin, {}, {}, {}", userName, passWord, clientCode);
-        return accountUserInfoService.doLogin(userName, passWord, clientCode);
+        return accountUserBizServices.doLogin(userName, passWord, clientCode);
     }
 
 
@@ -89,7 +93,7 @@ public class UserController {
      */
     @PostMapping("/registry/newUser")
     public AccountResponse<Boolean> registryNewUser(@RequestBody NewAccountUserInfo newAccountUserInfo) {
-        return accountUserInfoService.registerNewUser(newAccountUserInfo);
+        return accountUserBizServices.registerNewUser(newAccountUserInfo);
     }
 
 

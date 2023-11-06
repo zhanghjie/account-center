@@ -14,6 +14,7 @@ import org.springframework.web.bind.annotation.RequestMapping;
 import org.springframework.web.bind.annotation.RestController;
 
 import javax.servlet.http.HttpServletResponse;
+import java.util.List;
 
 /**
  * UserController
@@ -111,6 +112,13 @@ public class UserController {
     public AccountResponse<AccountUserInfo> getUerInfoByUserId(Long userId) {
         log.info("UserController-getUserInfoByToken:{}", userId);
         return accountUserInfoService.getAccountUerInfoByUserId(userId);
+    }
+
+
+    @PostMapping("/info/getUerInfoByUserIdList")
+    public AccountResponse<List<AccountUserInfo>> getUerInfoByUserIdList(@RequestBody List<Long> userId) {
+        log.info("UserController-getUerInfoByUserIdList:{}", userId);
+        return accountUserInfoService.getUerInfoByUserIdList(userId);
     }
 
 

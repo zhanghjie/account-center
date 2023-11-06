@@ -19,6 +19,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 
 import java.text.SimpleDateFormat;
+import java.util.ArrayList;
 import java.util.Date;
 import java.util.List;
 import java.util.Objects;
@@ -37,7 +38,6 @@ public class AccountUserInfoService {
 
     @Autowired
     private AccountLoginInfoMapper accountLoginInfoMapper;
-
 
 
     /**
@@ -182,6 +182,24 @@ public class AccountUserInfoService {
             throw new AccountCenterException("用户不存在");
         }
         return AccountResponse.returnSuccess(beanUtilsToInfo(accountUserPO));
+    }
+
+    /**
+     * 根据用户id获取用户信息
+     *
+     * @param userId 用户ID
+     * @return 用户信息
+     */
+    public AccountResponse<List<AccountUserInfo>> getUerInfoByUserIdList(List<Long> userIdList) {
+        List<AccountUserPO> accountUserPO = accountUserMapper.selectBatchIds(userIdList);
+        if (Objects.isNull(accountUserPO)) {
+            throw new AccountCenterException("用户不存在");
+        }
+        List<AccountUserInfo> accountUserInfos = new ArrayList<>();
+        for (AccountUserPO accountUserPO1 : accountUserPO) {
+            accountUserInfos.add(beanUtilsToInfo(accountUserPO1));
+        }
+        return AccountResponse.returnSuccess(accountUserInfos);
     }
 
 

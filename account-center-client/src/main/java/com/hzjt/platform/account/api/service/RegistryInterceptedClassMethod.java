@@ -38,7 +38,7 @@ import java.util.Set;
 @Component
 public class RegistryInterceptedClassMethod implements ApplicationContextAware, BeanPostProcessor, ApplicationRunner {
 
-    @Value("${account.setting.clientCode}")
+    @Value("${account.setting.clientCode:#{null}}")
     public String clientCode;
 
     private ApplicationContext applicationContext;

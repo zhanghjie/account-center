@@ -39,6 +39,11 @@ public interface AccountCenterUserService {
     AccountUserInfo getUserInfoByUserId(Long userId);
 
     /**
+     * 根据token获取用户信息
+     */
+    List<AccountUserInfo> getUerInfoByUserIdList(List<Long> userIdList);
+
+    /**
      * 根据phone发生短信验证码
      * type为验证码类型：登录、注册
      */

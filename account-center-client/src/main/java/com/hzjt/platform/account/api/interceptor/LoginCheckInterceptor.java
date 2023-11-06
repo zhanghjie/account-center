@@ -10,6 +10,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.Ordered;
 import org.springframework.stereotype.Component;
+import org.springframework.util.StringUtils;
 import org.springframework.web.method.HandlerMethod;
 import org.springframework.web.servlet.HandlerExecutionChain;
 import org.springframework.web.servlet.HandlerInterceptor;
@@ -71,9 +72,9 @@ public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
         String accountToken = getAccountToken(request, response);
 
         Boolean ignoreUrl = isIgnoreUrl(findHandlerMethod(request));
-        if (ignoreUrl && Objects.isNull(accountToken)) {
+        if (ignoreUrl && StringUtils.isEmpty(accountToken)) {
             return true;
-        } else if (Objects.nonNull(accountToken)) {
+        } else if (!StringUtils.isEmpty(accountToken)) {
             AccountUserInfo userInfo = getUserInfo(accountToken, request);
             if (Objects.isNull(userInfo) && accountLoginAutoLoginPage) {
                 return requestNoLogin(request, response);

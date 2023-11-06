@@ -33,7 +33,7 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
     private String accountCenterUrl;
 
 
-    @Value("${account.setting.clientCode}")
+    @Value("${account.setting.clientCode:#{null}}")
     public String clientCode;
 
     /**
@@ -95,6 +95,22 @@ public class AccountCenterUserServiceImpl implements AccountCenterUserService {
         params.put("userId", userId);
         String remoteServiceUrl = "/user/info/getUerInfoByUserId"; // 远程服务的URL
         return HttpClientUtil.doGet(accountCenterUrl + remoteServiceUrl, params, AccountUserInfo.class);
+    }
+
+    /**
+     * 根据token获取用户信息
+     *
+     * @param userIdList
+     */
+    @Override
+    public List<AccountUserInfo> getUerInfoByUserIdList(List<Long> userIdList) {
+        String remoteServiceUrl = "/user/info/getUerInfoByUserIdList"; // 远程服务的URL
+        String postResult = HttpClientUtil.doJsonPost(accountCenterUrl + remoteServiceUrl, JSON.toJSONString(userIdList), null);
+        AccountResponse accountResponse = JSON.parseObject(postResult, AccountResponse.class);
+        if (accountResponse.getIsSuccess() && accountResponse.getData() != null) {
+            return JSON.parseArray(accountResponse.getData().toString(), AccountUserInfo.class);
+        }
+        return null;
     }
 
     /**

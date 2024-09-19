@@ -113,6 +113,9 @@ public class LoginCheckInterceptor implements HandlerInterceptor, Ordered {
                 accountToken = request.getParameter(ACCOUNT_TOKEN);
             }
             Cookie[] cookies = request.getCookies();
+            if (Objects.isNull(cookies)) {
+                return accountToken;
+            }
             for (Cookie cookiecookie : cookies) {
                 if (Objects.equals(cookiecookie.getName(), ACCOUNT_TOKEN)) {
                     accountToken = cookiecookie.getValue();
